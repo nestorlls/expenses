@@ -1,4 +1,4 @@
-const expenses = [
+const initialExpenses = [
   {
     category: "Shopping",
     description: "Nintendo Switch",
@@ -10,6 +10,9 @@ const expenses = [
     amount: "600",
   },
 ];
+
+const expensesFromStorage = JSON.parse(localStorage.getItem("expenses")); // values || null
+const expenses = expensesFromStorage || initialExpenses;
 
 function createExpenseEle(expense) {
   // create elements
@@ -52,6 +55,7 @@ function createExpenseEle(expense) {
 function deleteExpense(expense) {
   const index = expenses.indexOf(expense);
   expenses.splice(index, 1);
+  localStorage.setItem("expenses", JSON.stringify(expenses));
 }
 
 // const expense = createExpenseEle(expenses[0]);
@@ -68,3 +72,11 @@ function renderExpenses(expenses) {
 }
 
 renderExpenses(expenses);
+
+// // Local Storage
+// const peaple = [{ name: "testino" }, { name: "Juan" }, { name: "Angelo" }];
+// localStorage.setItem("peaple", JSON.stringify(peaple));
+
+// // recuperar datos de local Stogare # JSON.parse convierte en Array[{},{},{}]
+// const peapleFromStorage = JSON.parse(localStorage.getItem("peaple"));
+// console.log(peapleFromStorage);
