@@ -1,18 +1,3 @@
-const initialExpenses = [
-  {
-    category: "Shopping",
-    description: "Nintendo Switch",
-    amount: "450",
-  },
-  {
-    category: "Shopping",
-    description: "Playstation 5",
-    amount: "600",
-  },
-];
-
-const expensesFromStorage = JSON.parse(localStorage.getItem("expenses")); // values || null
-const expenses = expensesFromStorage || initialExpenses;
 renderExpenses(expenses);
 
 function createExpenseEle(expense) {
@@ -53,11 +38,6 @@ function createExpenseEle(expense) {
   return li;
 }
 
-function deleteExpense(expense) {
-  const index = expenses.indexOf(expense);
-  expenses.splice(index, 1);
-  localStorage.setItem("expenses", JSON.stringify(expenses));
-}
 
 // const expense = createExpenseEle(expenses[0]);
 // const expenseList = document.querySelector(".js-expenses");
@@ -71,7 +51,6 @@ function renderExpenses(expenses) {
     expenseList.append(expenseElem);
   });
 }
-
 
 // // Local Storage
 // const peaple = [{ name: "testino" }, { name: "Juan" }, { name: "Angelo" }];
