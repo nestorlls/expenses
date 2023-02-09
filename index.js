@@ -13,6 +13,7 @@ const initialExpenses = [
 
 const expensesFromStorage = JSON.parse(localStorage.getItem("expenses")); // values || null
 const expenses = expensesFromStorage || initialExpenses;
+renderExpenses(expenses);
 
 function createExpenseEle(expense) {
   // create elements
@@ -71,7 +72,6 @@ function renderExpenses(expenses) {
   });
 }
 
-renderExpenses(expenses);
 
 // // Local Storage
 // const peaple = [{ name: "testino" }, { name: "Juan" }, { name: "Angelo" }];
