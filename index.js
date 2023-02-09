@@ -1,12 +1,23 @@
+const idGenerator = (() => {
+  let id = 0;
+  return {
+    next() {
+      return ++id;
+    },
+  };
+})();
+
 const Store = (function () {
   // Data Store
   const initialExpenses = [
     {
+      id: idGenerator.next(),
       category: "Shopping",
       description: "Nintendo Switch",
       amount: "450",
     },
     {
+      id: idGenerator.next(),
       category: "Shopping",
       description: "Playstation 5",
       amount: "600",
@@ -15,14 +26,16 @@ const Store = (function () {
 
   return {
     expenses: JSON.parse(localStorage.getItem("expenses")) || initialExpenses,
-    deleteExpense(expense) {
-      const index = expenses.indexOf(expense);
-      expenses.splice(index, 1);
-      localStorage.setItem("expenses", JSON.stringify(expenses));
+    deleteExpense(id) {
+      const index = this.expenses.findIndex((expense) => expense.id == id);
+      this.expenses.splice(index, 1);
+      localStorage.setItem("expenses", JSON.stringify(this.expenses));
+      Main.load(ExpenseView)
     },
     createExpense(expense) {
-      expenses.push(expense);
-      localStorage.setItem("expenses", JSON.stringify(expenses));
+      expense.id = idGenerator.next();
+      this.expenses.push(expense);
+      localStorage.setItem("expenses", JSON.stringify(this.expenses));
     },
   };
 })();
@@ -120,29 +133,56 @@ const Header = (function () {
   };
 })();
 
-const renderExpens = (expense) => {
-  return `
-  <li class="expense">
-    <div class="expense__detail">
-      <div>
-        <p class="heading-sx bold">${expense.category}</p>
-        <p class="content-sm gray-300">${expense.description}</p>
-      </div>
-      <p class="content-xl bold">$${expense.amount}</p>
-    </div>
-    <div class="expense__actions">
-      <a href="#">Delete</a>
-    </div>
-  </li>
-  `;
-};
-
 const ExpenseView = (function () {
-  const template = `
+  const renderExpens = (expense) => {
+    return `
+    <li class="expense">
+      <div class="expense__detail">
+        <div>
+          <p class="heading-sx bold">${expense.category}</p>
+          <p class="content-sm gray-300">${expense.description}</p>
+        </div>
+        <p class="content-xl bold">$${expense.amount}</p>
+      </div>
+      <div class="expense__actions">
+        <a data-id="${expense.id}"class="js-delete">Delete</a>
+      </div>
+    </li>
+    `;
+  };
+  const template = () => `
     <ul class="expenses js-expenses">
       ${Store.expenses.map((expense) => renderExpens(expense)).join("")}
     </ul>
   `;
+
+  const listenDelete = () => {
+    const expensesList = document.querySelector(".js-expenses");
+    expensesList.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (!event.target.classList.contains("js-delete")) return;
+      const id = event.target.dataset.id;
+      Store.deleteExpense(id);
+    });
+  };
+  return {
+    toString() {
+      return template();
+    },
+    addListeners() {
+      listenDelete();
+    },
+  };
+})();
+
+// footer
+const Footer = (function () {
+  const template = `
+  <footer class="footer">
+    <p>Codeable 2023</p>
+  </footer>
+  `;
+
   return {
     toString() {
       return template;
@@ -159,6 +199,7 @@ const Layout = (function () {
     <div class="container js-main">
     </div>
   </main>
+  ${Footer}
   `;
 
   return {
@@ -171,15 +212,67 @@ const Layout = (function () {
   };
 })();
 
+const createInput = ({ id, label, placeholder = "", type = "text" }) => {
+  return `
+  <div class="input">
+    <label for="${id}" class="content-xs overline">${label}</label>
+    <div class="input__container">
+      <input type="${type}"
+        name="${id}"
+        id="${id}"
+        class="input__content"
+        placeholder="${placeholder}">
+    </div>
+  </div>
+  `;
+};
+
 // new expense view
 const NewExpenseView = (function () {
-  const template = `<h2 class="heading-sm text-center mb-4">Add New Expense</h2>`;
+  const template = `
+  <h2 class="heading-sm mb-4 text-center">Add new Expense</h2>
+  <form action="#" class="flex flex-column gap-4 js-expense-form">
+    ${createInput({
+      id: "category",
+      label: "category",
+      placeholder: "Example: Shopping",
+    })}
+    ${createInput({
+      id: "description",
+      label: "description",
+      placeholder: "Example: Description Shopping",
+    })}
+    ${createInput({ id: "amount", label: "amount", type: "number" })}
+    <button type="submit" class="button button--primary button--lg full-width">Add expense</button>
+  </form>
+  `;
+
+  const listenSubmit = () => {
+    const form = document.querySelector(".js-expense-form");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      console.log("submit!!");
+      const { category, description, amount } = event.target.elements;
+      const newExpense = {
+        category: category.value,
+        description: description.value,
+        amount: amount.value,
+      };
+
+      Store.createExpense(newExpense);
+
+      // para ir a la vista de lista o index
+      Main.load(ExpenseView);
+    });
+  };
 
   return {
     toString() {
       return template;
     },
-    addListeners() {},
+    addListeners() {
+      listenSubmit();
+    },
   };
 })();
 
