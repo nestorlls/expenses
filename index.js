@@ -39,7 +39,19 @@ function createExpenseEle(expense) {
   actions.append(deleteLink);
   expenseDetail.append(container, amount);
   li.append(expenseDetail, actions);
+
+  // add Event listeners
+  deleteLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    deleteExpense(expense);
+    renderExpenses(expenses);
+  });
   return li;
+}
+
+function deleteExpense(expense) {
+  const index = expenses.indexOf(expense);
+  expenses.splice(index, 1);
 }
 
 // const expense = createExpenseEle(expenses[0]);
