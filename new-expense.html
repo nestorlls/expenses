@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Workshop expenses C-9</title>
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container navbar js-navbar">
+        <h2>Expenses Tracker</h2>
+        <nav>
+          <ul class="navbar-links" role="list">
+            <li><a href=""index.html">List Expenses</a></li>
+            <li><a href="new-expenses.html">Add Expenses</a></li>
+          </ul>
+        </nav>
+        <div class="navbar-icons js-navbar-menu">
+          <img src="./images/icons/menu.svg" class="navbar__menu-icon"alt="">
+          <img src="./images/icons/close.svg" class="navbar__menu-icon-close"alt="">
+        </div>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container">
+        <h2 class="heading-sm mb-4 text-center">Add new Expense</h2>
+        <form action="#" class="flex flex-column gap-4">
+          <div class="input">
+            <label for="category" class="content-xs overline">Category</label>
+            <div class="input__container">
+              <input type="text" name="category" id="category" class="input__content" placeholder="">
+            </div>
+          </div>
+
+          <div class="input">
+            <label for="description" class="content-xs overline">Description</label>
+            <div class="input__container">
+              <input type="text" name="description" id="description" class="input__content" placeholder="">
+            </div>
+          </div>
+
+          <div class="input">
+            <label for="amount" class="content-xs overline">amount</label>
+            <div class="input__container">
+              <input type="text" name="amount" id="amount" class="input__content" placeholder="">
+            </div>
+          </div>
+
+          <button type="submit" class="button button--primary button--lg full-width">Add expense</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Codeable 2023</p>
+    </footer>
+    <script src="navbar.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
